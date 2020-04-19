@@ -23,6 +23,17 @@ public class TreeHelper {
     }
 
     /**
+     * Produces a tree with empty string as a root
+     *
+     * @return tree with root contains empty string
+     */
+    public static TreeView<String> createTree() {
+        TreeView<String> tree = new TreeView<>();
+        tree.setRoot(new TreeItem<>(""));
+        return tree;
+    }
+
+    /**
      * Populates tree with basic data and lazily populates all subdirectories
      *
      * @param tree tree to populate
@@ -87,5 +98,9 @@ public class TreeHelper {
                             }
                     );
         }
+    }
+
+    public static void clearTree(TreeView<String> tree) {
+        tree.getRoot().getChildren().clear();
     }
 }

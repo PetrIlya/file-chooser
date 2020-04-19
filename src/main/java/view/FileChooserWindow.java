@@ -5,20 +5,27 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import utils.TreeHelper;
 
 import java.util.List;
+import java.util.Optional;
 
-
+/**
+ * Dialog for file choosing
+ */
 public class FileChooserWindow {
     private final FileViewContainer container;
     private final Dialog<String> window;
 
-    public FileChooserWindow(FileViewContainer container) {
-        this.container = container;
+    public FileChooserWindow() {
+        this.container = new FileViewContainer(TreeHelper.createTree());
         this.window = new Dialog<>();
         configWindow();
     }
 
+    /**
+     * Configures dialog pane window
+     */
     public void configWindow() {
         this.window.getDialogPane().setContent(container.getTopContainer());
         this.window.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -28,10 +35,23 @@ public class FileChooserWindow {
                 if (paths == null) {
                     return null;
                 }
+                paths.remove(0);
                 return String.join("\\", paths);
             } else {
                 return null;
             }
         });
+    }
+
+    /**
+     * Get current selected path
+     *
+     * @return Paths or null if nothing was selected
+     */
+    public Optional<String> getPath() {
+        TreeHelper.populateTree(this.container.getTree());
+        Optional<String> path = this.window.showAndWait();
+        TreeHelper.clearTree(this.container.getTree());
+        return path;
     }
 }
