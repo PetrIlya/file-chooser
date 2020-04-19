@@ -1,9 +1,9 @@
 package com.github.PetrIlya.view;
 
+import com.github.PetrIlya.model.ElementType;
 import com.github.PetrIlya.model.Record;
 import com.github.PetrIlya.utils.TreeHelper;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.HBox;
@@ -33,10 +33,10 @@ public class FileChooserWindow {
         configWindow();
     }
 
-    public FileChooserWindow(EventHandler<ActionEvent> eventHandler, List<Record> records) {
+    public FileChooserWindow(List<Record> records) {
         this.records = records;
         this.topContainer = new HBox();
-        this.treeContainer = new FileViewContainer(TreeHelper.createTree(), eventHandler, records);
+        this.treeContainer = new FileViewContainer(TreeHelper.createTree(), this::filterEvent, records);
         this.tableContainer = new TableContainer(records);
         this.window = new Dialog<>();
         configWindow();
@@ -97,5 +97,18 @@ public class FileChooserWindow {
 
     public String getFileName() {
         return this.treeContainer.getFileName().getText();
+    }
+
+    private void filterEvent(ActionEvent e) {
+        if (!this.getExtensionToFilter().equals("")) {
+            this.records.removeIf(record -> {
+                if (ElementType.FILE.equals(record.getType())) {
+                    return !record.getExtension().
+                            equals(this.getExtensionToFilter());
+                }
+                return false;
+            });
+            this.tableContainer.updateTable();
+        }
     }
 }

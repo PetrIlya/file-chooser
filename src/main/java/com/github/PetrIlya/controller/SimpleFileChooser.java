@@ -1,9 +1,7 @@
 package com.github.PetrIlya.controller;
 
-import com.github.PetrIlya.model.ElementType;
 import com.github.PetrIlya.model.Record;
 import com.github.PetrIlya.view.FileChooserWindow;
-import javafx.event.ActionEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +15,7 @@ public class SimpleFileChooser extends FileChooser {
 
     public SimpleFileChooser() {
         this.tableRecords = new ArrayList<>();
-        this.setWindow(new FileChooserWindow(this::filter, tableRecords));
+        this.setWindow(new FileChooserWindow(tableRecords));
     }
 
     @Override
@@ -53,15 +51,5 @@ public class SimpleFileChooser extends FileChooser {
             }
         }
         return Optional.empty();
-    }
-
-    private void filter(ActionEvent e) {
-        this.tableRecords.removeIf(record -> {
-            if (ElementType.FILE.equals(record.getType())) {
-                return !record.getExtension().
-                        equals(this.getWindow().getExtensionToFilter());
-            }
-            return false;
-        });
     }
 }
