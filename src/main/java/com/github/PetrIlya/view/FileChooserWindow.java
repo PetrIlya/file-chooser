@@ -1,6 +1,8 @@
 package com.github.PetrIlya.view;
 
 import com.github.PetrIlya.utils.TreeHelper;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 
@@ -16,6 +18,12 @@ public class FileChooserWindow {
 
     public FileChooserWindow() {
         this.container = new FileViewContainer(TreeHelper.createTree());
+        this.window = new Dialog<>();
+        configWindow();
+    }
+
+    public FileChooserWindow(EventHandler<ActionEvent> eventHandler) {
+        this.container = new FileViewContainer(TreeHelper.createTree(), eventHandler);
         this.window = new Dialog<>();
         configWindow();
     }
@@ -50,5 +58,13 @@ public class FileChooserWindow {
         Optional<String> path = this.window.showAndWait();
         TreeHelper.clearTree(this.container.getTree());
         return path;
+    }
+
+    public String getExtensionToFilter() {
+        return this.container.getFilterRegExpr().getText();
+    }
+
+    public String getFileName() {
+        return this.container.getFileName().getText();
     }
 }

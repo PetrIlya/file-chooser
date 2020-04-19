@@ -16,6 +16,8 @@ public abstract class FileChooser {
 
     public abstract Optional<File> save(String fileName) throws IOException;
 
+    public abstract Optional<File> save() throws IOException;
+
     public FileChooserWindow getWindow() {
         return window;
     }

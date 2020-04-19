@@ -48,4 +48,8 @@ public class Record {
     public void setSize(Integer size) {
         this.size = size;
     }
+
+    public ElementType getType() {
+        return type;
+    }
 }

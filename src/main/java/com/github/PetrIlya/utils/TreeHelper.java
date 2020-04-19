@@ -193,8 +193,7 @@ public class TreeHelper {
                                 if (!correctElement.isDirectory()) {
                                     type = ElementType.FILE;
                                     if (name.lastIndexOf(".") > 0) {
-                                        extension = name.substring(name.lastIndexOf(".")
-                                                , name.length() - 1);
+                                        extension = name.substring(name.lastIndexOf(".") + 1);
                                     }
                                     try {
                                         size = Files.size(Path.of(file.getAbsolutePath()));

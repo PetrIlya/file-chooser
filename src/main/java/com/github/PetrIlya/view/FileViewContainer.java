@@ -1,5 +1,7 @@
 package com.github.PetrIlya.view;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -32,6 +34,18 @@ public class FileViewContainer {
         this.filterContainer = new VBox();
         this.filterRegExpr = new TextField();
         this.filterButton = new Button("Filter files by RegExpr");
+        configContainers();
+    }
+
+    public FileViewContainer(TreeView<String> tree, EventHandler<ActionEvent> filterEvent) {
+        this.topContainer = new VBox();
+        this.tree = tree;
+        this.textContainer = new HBox();
+        this.fileName = new TextField();
+        this.filterContainer = new VBox();
+        this.filterRegExpr = new TextField();
+        this.filterButton = new Button("Filter files by RegExpr");
+        this.filterButton.setOnAction(filterEvent);
         configContainers();
     }
 
@@ -78,5 +92,13 @@ public class FileViewContainer {
 
     public TreeView<String> getTree() {
         return this.tree;
+    }
+
+    public TextField getFileName() {
+        return fileName;
+    }
+
+    public TextField getFilterRegExpr() {
+        return filterRegExpr;
     }
 }
