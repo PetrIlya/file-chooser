@@ -1,5 +1,6 @@
 package com.github.PetrIlya.view;
 
+import com.github.PetrIlya.model.Record;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -25,8 +26,10 @@ public class FileViewContainer {
     private final VBox filterContainer;
     private final TextField filterRegExpr;
     private final Button filterButton;
+    private final List<Record> records;
 
     public FileViewContainer(TreeView<String> tree) {
+        this.records = new ArrayList<>();
         this.topContainer = new VBox();
         this.tree = tree;
         this.textContainer = new HBox();
@@ -37,7 +40,8 @@ public class FileViewContainer {
         configContainers();
     }
 
-    public FileViewContainer(TreeView<String> tree, EventHandler<ActionEvent> filterEvent) {
+    public FileViewContainer(TreeView<String> tree, EventHandler<ActionEvent> filterEvent, List<Record> records) {
+        this.records = records;
         this.topContainer = new VBox();
         this.tree = tree;
         this.textContainer = new HBox();

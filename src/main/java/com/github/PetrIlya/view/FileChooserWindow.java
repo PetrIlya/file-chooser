@@ -8,7 +8,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.HBox;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -19,8 +22,10 @@ public class FileChooserWindow {
     private final FileViewContainer treeContainer;
     private final TableContainer tableContainer;
     private final Dialog<String> window;
+    private final List<Record> records;
 
     public FileChooserWindow() {
+        this.records = new ArrayList<>();
         this.topContainer = new HBox();
         this.treeContainer = new FileViewContainer(TreeHelper.createTree());
         this.tableContainer = null;
@@ -29,8 +34,9 @@ public class FileChooserWindow {
     }
 
     public FileChooserWindow(EventHandler<ActionEvent> eventHandler, List<Record> records) {
+        this.records = records;
         this.topContainer = new HBox();
-        this.treeContainer = new FileViewContainer(TreeHelper.createTree(), eventHandler);
+        this.treeContainer = new FileViewContainer(TreeHelper.createTree(), eventHandler, records);
         this.tableContainer = new TableContainer(records);
         this.window = new Dialog<>();
         configWindow();
@@ -40,6 +46,19 @@ public class FileChooserWindow {
      * Configures dialog pane window
      */
     public void configWindow() {
+        this.treeContainer.getTree().
+                getSelectionModel().
+                selectedItemProperty().
+                addListener(((observable, oldValue, newValue) -> {
+                    if (newValue != null && !newValue.getValue().equals("")) {
+                        String path = String.join("\\", Objects.requireNonNull(treeContainer.getSelectedPath()));
+                        this.records.clear();
+                        TreeHelper.populateListWithData(new File(path), this.records);
+                        this.tableContainer.updateTable();
+                    }
+                }));
+
+
         this.topContainer.getChildren().
                 addAll(this.treeContainer.getTopContainer(),
                         this.tableContainer.getTopContainer());
@@ -54,6 +73,7 @@ public class FileChooserWindow {
                 paths.remove(0);
                 return String.join("\\", paths);
             } else {
+                TreeHelper.clearTree(this.treeContainer.getTree());
                 return null;
             }
         });
@@ -65,7 +85,7 @@ public class FileChooserWindow {
      * @return Paths or null if nothing was selected
      */
     public Optional<String> getPath() {
-        TreeHelper.populateTree(this.treeContainer.getTree());
+        TreeHelper.populateTree(this.treeContainer.getTree(), records);
         Optional<String> path = this.window.showAndWait();
         TreeHelper.clearTree(this.treeContainer.getTree());
         return path;

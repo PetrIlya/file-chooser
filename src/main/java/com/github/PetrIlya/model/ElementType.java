@@ -1,7 +1,7 @@
 package com.github.PetrIlya.model;
 
 public enum ElementType {
-    FOLDER("image\\file.png"), FILE("image\\folder.jpg");
+    FOLDER("image\\folder.jpg"), FILE("image\\file.png");
     private final String path;
 
     ElementType(String path) {

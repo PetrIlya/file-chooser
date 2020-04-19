@@ -24,14 +24,13 @@ public class RecordTableFactory {
         TableColumn<Record, String> extensionColumn = new TableColumn<>(TableColumnNames.EXTENSION.getName());
         extensionColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getExtension()));
         TableColumn<Record, String> sizeColumn = new TableColumn<>(TableColumnNames.SIZE.getName());
-        sizeColumn.setCellValueFactory(cell -> new SimpleStringProperty(Long.toString(cell.getValue().getSize())));
-        table.getColumns().addAll(iconColumn, nameColumn, dateColumn, extensionColumn, sizeColumn);
-        table.getColumns().forEach(column -> {
-            column.setMinWidth(50D);
-            column.setMaxWidth(50D);
+        sizeColumn.setCellValueFactory(cell -> {
+            if (cell.getValue().getSize() != Long.MIN_VALUE) {
+                return new SimpleStringProperty(Long.toString(cell.getValue().getSize()));
+            }
+            return new SimpleStringProperty("");
         });
-        table.setMinWidth(50D * table.getColumns().size());
-        table.setMaxWidth(50D * table.getColumns().size());
+        table.getColumns().addAll(iconColumn, nameColumn, dateColumn, extensionColumn, sizeColumn);
         return table;
     }
 

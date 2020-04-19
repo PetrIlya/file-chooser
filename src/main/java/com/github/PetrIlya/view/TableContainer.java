@@ -19,8 +19,10 @@ public class TableContainer {
     private final HBox buttonContainer;
     private final Button asTable;
     private final Button asList;
+    private final List<Record> records;
 
     public TableContainer(List<Record> records) {
+        this.records = records;
         this.deletedColumns = new ArrayList<>();
         this.topContainer = new VBox();
         this.buttonContainer = new HBox();
@@ -52,5 +54,10 @@ public class TableContainer {
 
     public VBox getTopContainer() {
         return topContainer;
+    }
+
+    public void updateTable() {
+        this.table.getItems().clear();
+        this.table.getItems().addAll(this.records);
     }
 }

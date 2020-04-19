@@ -130,12 +130,28 @@ public class TreeHelper {
     }
 
     /**
+     * Populates tree with basic data and lazily populates all subdirectories
+     * and binds it with table
+     *
+     * @param tree tree to populate
+     */
+    public static void populateTree(TreeView<String> tree, List<Record> records) {
+        Arrays.stream(File.listRoots()).
+                sorted().
+                forEach(rootDirectory -> {
+                    TreeItem<String> subRoot = new TreeItem<>(rootDirectory.getAbsolutePath());
+                    tree.getRoot().getChildren().add(subRoot);
+                    populateNodeWithDirectories(subRoot, rootDirectory, records);
+                });
+    }
+
+    /**
      * Lazily populates node with subdirs only
      *
      * @param root node to populate
      * @param file file to start from
      */
-    public static void populateNodeWithDirectories(TreeItem<String> root, File file) {
+    public static void populateNodeWithDirectories(TreeItem<String> root, File file, List<Record> records) {
         if (file.listFiles() != null) {
             Arrays.
                     stream(Objects.requireNonNull(file.listFiles())).
@@ -155,7 +171,7 @@ public class TreeHelper {
                                             ((observable, oldValue, newValue) -> {
                                                 if (!oldValue && newValue) {
                                                     subRoot.getChildren().remove(mockItem);
-                                                    populateNodeWithDirectories(subRoot, correctElement);
+                                                    populateNodeWithDirectories(subRoot, correctElement, records);
                                                 } else {
                                                     subRoot.getChildren().clear();
                                                     subRoot.getChildren().add(mockItem);
@@ -176,13 +192,23 @@ public class TreeHelper {
      * @param records list to populate
      * @param file    file to get data from
      */
-    public static void populateListWithData(List<Record> records, File file) {
+    public static void populateListWithData(File file, List<Record> records) {
         if (file.listFiles() != null) {
             Arrays.
                     stream(Objects.requireNonNull(file.listFiles())).
                     filter(element -> !element.isHidden()).
                     filter(File::canRead).
                     filter(File::canWrite).
+                    sorted((first, second) -> {
+                        if (first.isDirectory() == second.isDirectory()) {
+                            return 0;
+                        } else {
+                            if (first.isDirectory()) {
+                                return -1;
+                            }
+                        }
+                        return 1;
+                    }).
                     forEach(
                             correctElement -> {
                                 ElementType type = ElementType.FOLDER;
