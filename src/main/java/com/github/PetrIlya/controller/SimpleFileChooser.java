@@ -16,8 +16,8 @@ public class SimpleFileChooser extends FileChooser {
     private final List<Record> tableRecords;
 
     public SimpleFileChooser() {
-        this.setWindow(new FileChooserWindow(this::filter));
         this.tableRecords = new ArrayList<>();
+        this.setWindow(new FileChooserWindow(this::filter, tableRecords));
     }
 
     @Override
