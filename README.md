@@ -6,5 +6,5 @@ Add maven dependency:
 	<dependency>
       <groupId>com.github.PetrIlya</groupId>
       <artifactId>file-chooser</artifactId>
-      <version>0.0.2</version>
+      <version>0.0.3</version>
     </dependency>
