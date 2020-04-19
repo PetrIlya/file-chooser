@@ -1,5 +1,6 @@
 package com.github.PetrIlya.view;
 
+import com.github.PetrIlya.controller.ActionType;
 import com.github.PetrIlya.model.ElementType;
 import com.github.PetrIlya.model.Record;
 import com.github.PetrIlya.utils.TreeHelper;
@@ -18,6 +19,8 @@ import java.util.Optional;
  * Dialog for file choosing
  */
 public class FileChooserWindow {
+    private ActionType actionType;
+
     private final HBox topContainer;
     private final FileViewContainer treeContainer;
     private final TableContainer tableContainer;
@@ -34,6 +37,7 @@ public class FileChooserWindow {
     }
 
     public FileChooserWindow(List<Record> records) {
+        this.actionType = null;
         this.records = records;
         this.topContainer = new HBox();
         this.treeContainer = new FileViewContainer(TreeHelper.createTree(), this::filterEvent, records);
@@ -71,6 +75,26 @@ public class FileChooserWindow {
                     return null;
                 }
                 paths.remove(0);
+                if (ActionType.LOAD.equals(this.actionType)) {
+                    this.tableContainer.getSelectedItem().ifPresentOrElse(record -> {
+                        if (ElementType.FOLDER.equals(record.getType())) {
+                            paths.clear();
+                        } else {
+                            paths.add(record.getName());
+                        }
+                    }, paths::clear);
+                } else if (ActionType.SAVE.equals(this.actionType)) {
+                    this.tableContainer.getSelectedItem().ifPresent(record -> {
+                        if (ElementType.FILE.equals(record.getType())) {
+                            paths.clear();
+                        } else {
+                            paths.add(record.getName());
+                        }
+                    });
+                }
+                if (paths.size() == 0) {
+                    return null;
+                }
                 return String.join("\\", paths);
             } else {
                 TreeHelper.clearTree(this.treeContainer.getTree());
@@ -110,5 +134,9 @@ public class FileChooserWindow {
             });
             this.tableContainer.updateTable();
         }
+    }
+
+    public void setActionType(ActionType actionType) {
+        this.actionType = actionType;
     }
 }

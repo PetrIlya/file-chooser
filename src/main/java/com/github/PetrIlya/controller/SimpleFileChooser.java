@@ -20,6 +20,7 @@ public class SimpleFileChooser extends FileChooser {
 
     @Override
     public Optional<File> load() {
+        this.getWindow().setActionType(ActionType.LOAD);
         Optional<String> path = this.getWindow().
                 getPath();
         return path.map(File::new);
@@ -27,6 +28,7 @@ public class SimpleFileChooser extends FileChooser {
 
     @Override
     public Optional<File> save(String fileName) throws IOException {
+        this.getWindow().setActionType(ActionType.SAVE);
         Optional<String> pathToSave = this.getWindow().getPath();
         if (pathToSave.isPresent()) {
             File fileToSave = new File(String.valueOf(Path.of(pathToSave.get(), fileName)));
@@ -41,6 +43,7 @@ public class SimpleFileChooser extends FileChooser {
 
     @Override
     public Optional<File> save() throws IOException {
+        this.getWindow().setActionType(ActionType.SAVE);
         Optional<String> pathToSave = this.getWindow().getPath();
         if (pathToSave.isPresent()) {
             File fileToSave = new File(String.valueOf(Path.of(pathToSave.get(), this.getWindow().getFileName())));

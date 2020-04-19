@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TableContainer {
     private final List<TableColumn<Record, ?>> deletedColumns;
@@ -59,5 +60,11 @@ public class TableContainer {
     public void updateTable() {
         this.table.getItems().clear();
         this.table.getItems().addAll(this.records);
+    }
+
+    public Optional<Record> getSelectedItem() {
+        return Optional.ofNullable(this.table.
+                getSelectionModel().
+                getSelectedItem());
     }
 }
