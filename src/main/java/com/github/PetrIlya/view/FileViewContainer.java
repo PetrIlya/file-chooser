@@ -1,4 +1,4 @@
-package view;
+package com.github.PetrIlya.view;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;

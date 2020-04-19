@@ -1,11 +1,8 @@
-package view;
+package com.github.PetrIlya.view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
+import com.github.PetrIlya.utils.TreeHelper;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import utils.TreeHelper;
 
 import java.util.List;
 import java.util.Optional;

@@ -12,7 +12,7 @@
 
     <groupId>com.github.PetrIlya</groupId>
     <artifactId>file-chooser</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
     <name>FIle chooser</name>
     <description>Simple file chooser to save and load files.</description>

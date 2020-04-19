@@ -1,6 +1,5 @@
-package utils;
+package com.github.PetrIlya.utils;
 
-import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;

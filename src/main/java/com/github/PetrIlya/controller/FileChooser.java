@@ -1,6 +1,6 @@
-package controller;
+package com.github.PetrIlya.controller;
 
-import view.FileChooserWindow;
+import com.github.PetrIlya.view.FileChooserWindow;
 
 import java.io.File;
 import java.io.IOException;
