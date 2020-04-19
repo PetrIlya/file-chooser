@@ -24,7 +24,7 @@ public class FileChooserWindow {
      * Configures dialog pane window
      */
     public void configWindow() {
-        this.window.getDialogPane().setContent(container.getTopContainer());
+        this.window.getDialogPane().setExpandableContent(container.getTopContainer());
         this.window.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         this.window.setResultConverter(value -> {
             if (value.equals(ButtonType.OK)) {
