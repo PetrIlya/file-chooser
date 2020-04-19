@@ -1,6 +1,5 @@
 package controller;
 
-import lombok.Data;
 import view.FileChooserWindow;
 
 import java.io.File;
