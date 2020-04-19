@@ -1,11 +1,8 @@
 package view;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +12,6 @@ import java.util.List;
  * Container for file selection menu
  * Used inside main window to represent files
  */
-@Getter
 public class FileViewContainer {
     private final VBox topContainer;
     private final TreeView<String> tree;
@@ -55,5 +51,13 @@ public class FileViewContainer {
         } while (treeItem != null);
         Collections.reverse(paths);
         return paths;
+    }
+
+    public VBox getTopContainer() {
+        return this.topContainer;
+    }
+
+    public TreeView<String> getTree() {
+        return this.tree;
     }
 }
