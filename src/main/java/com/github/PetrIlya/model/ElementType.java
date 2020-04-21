@@ -1,7 +1,9 @@
 package com.github.PetrIlya.model;
 
+import javafx.scene.image.ImageView;
+
 public enum ElementType {
-    FOLDER("image\\folder.jpg"), FILE("image\\file.png");
+    FOLDER("/image/folder.jpg"), FILE("/image/file.png");
     private final String path;
 
     ElementType(String path) {
@@ -10,5 +12,9 @@ public enum ElementType {
 
     public String getPath() {
         return path;
+    }
+
+    public ImageView getImageView() {
+        return new ImageView(String.valueOf(this.getClass().getResource(getPath())));
     }
 }

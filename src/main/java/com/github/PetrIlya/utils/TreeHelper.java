@@ -7,13 +7,9 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class TreeHelper {
     /**
@@ -133,7 +129,8 @@ public class TreeHelper {
      * Populates tree with basic data and lazily populates all subdirectories
      * and binds it with table
      *
-     * @param tree tree to populate
+     * @param tree    tree to populate
+     * @param records records to store data
      */
     public static void populateTree(TreeView<String> tree, List<Record> records) {
         Arrays.stream(File.listRoots()).
@@ -150,6 +147,7 @@ public class TreeHelper {
      *
      * @param root node to populate
      * @param file file to start from
+     * @param records records to store file data
      */
     public static void populateNodeWithDirectories(TreeItem<String> root, File file, List<Record> records) {
         if (file.listFiles() != null) {
@@ -221,15 +219,51 @@ public class TreeHelper {
                                     if (name.lastIndexOf(".") > 0) {
                                         extension = name.substring(name.lastIndexOf(".") + 1);
                                     }
-                                    try {
-                                        size = Files.size(Path.of(file.getAbsolutePath()));
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                    size = file.length();
                                 }
                                 records.add(new Record(type, name, date, extension, size));
                             }
                     );
         }
+    }
+
+    /**
+     * Return TreeItem that refers to user home directory
+     *
+     * @param root fictional root of a tree
+     * @return TreeItem that refers to user home directory or null if nothing was found
+     */
+    public static TreeItem<String> getHomeNode(TreeItem<String> root) {
+        String pathToHome = System.getProperty("user.home");
+        File homeDirectory = new File(pathToHome);
+        if (homeDirectory.exists() && homeDirectory.isDirectory()) {
+            List<String> pathElements = new ArrayList<>();
+            while (homeDirectory != null) {
+                if (!homeDirectory.getName().equals("")) {
+                    pathElements.add(homeDirectory.getName());
+                } else {
+                    pathElements.add(homeDirectory.getAbsolutePath());
+                }
+                homeDirectory = homeDirectory.getParentFile();
+            }
+            Collections.reverse(pathElements);
+            TreeItem<String> homeItem = null;
+            for (String pathElement : pathElements) {
+                if (root != null) {
+                    root = root.
+                            getChildren().
+                            stream().
+                            collect(Collectors.
+                                    toMap(TreeItem::getValue,
+                                            Function.identity())).
+                            getOrDefault(pathElement, null);
+                    if (root != null) {
+                        root.setExpanded(true);
+                    }
+                }
+            }
+            return root;
+        }
+        return null;
     }
 }

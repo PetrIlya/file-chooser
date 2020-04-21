@@ -1,6 +1,7 @@
 package com.github.PetrIlya.view;
 
 import com.github.PetrIlya.model.Record;
+import com.github.PetrIlya.utils.TreeHelper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -26,9 +27,11 @@ public class FileViewContainer {
     private final VBox filterContainer;
     private final TextField filterRegExpr;
     private final Button filterButton;
+    private final Button toHomeButton;
     private final List<Record> records;
 
     public FileViewContainer(TreeView<String> tree) {
+        this.toHomeButton = new Button("To home directory");
         this.records = new ArrayList<>();
         this.topContainer = new VBox();
         this.tree = tree;
@@ -37,10 +40,12 @@ public class FileViewContainer {
         this.filterContainer = new VBox();
         this.filterRegExpr = new TextField();
         this.filterButton = new Button("Filter files by RegExpr");
+        configHomeButton();
         configContainers();
     }
 
     public FileViewContainer(TreeView<String> tree, EventHandler<ActionEvent> filterEvent, List<Record> records) {
+        this.toHomeButton = new Button("To home directory");
         this.records = records;
         this.topContainer = new VBox();
         this.tree = tree;
@@ -50,6 +55,7 @@ public class FileViewContainer {
         this.filterRegExpr = new TextField();
         this.filterButton = new Button("Filter files by RegExpr");
         this.filterButton.setOnAction(filterEvent);
+        configHomeButton();
         configContainers();
     }
 
@@ -63,7 +69,16 @@ public class FileViewContainer {
                         filterRegExpr,
                         filterButton);
         this.textContainer.getChildren().addAll(fileName, filterContainer);
-        this.topContainer.getChildren().addAll(tree, textContainer);
+        this.topContainer.getChildren().addAll(tree, textContainer, toHomeButton);
+    }
+
+    public void configHomeButton() {
+        toHomeButton.setOnAction(e -> {
+            TreeItem<String> toSelect = TreeHelper.getHomeNode(this.tree.getRoot());
+            if (toSelect != null) {
+                this.tree.getSelectionModel().select(toSelect);
+            }
+        });
     }
 
     /**
